@@ -1,5 +1,5 @@
 local PlayerData = {}
-PlayerData.COIN_KEY_NAME = "Point"
+PlayerData.COIN_KEY_NAME = "Coins"
 
 local playerData = {
   --[[

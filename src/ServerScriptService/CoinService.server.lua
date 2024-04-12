@@ -1,34 +1,18 @@
-local Players = game:GetService("Players")
+-- Initializing services and variables
 local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 
 -- Modules
 local Leaderboard = require(ServerStorage.Leaderboard)
 local PlayerData = require(ServerStorage.PlayerData)
 
-local coinsFolder = Workspace.P5.Clear
+local coinsFolder = Workspace.World.Coins
 local coins = coinsFolder:GetChildren()
 
 local COIN_KEY_NAME = PlayerData.COIN_KEY_NAME
 local COOLDOWN = 10
 local COIN_AMOUNT_TO_ADD = 1
-
-
-local function onPlayerAdded(player)
-	local leaderstats = Instance.new("Folder")
-	leaderstats.Name = "leaderstats"
-	leaderstats.Parent = player
-
-	local points = Instance.new("IntValue")
-	points.Name = COIN_KEY_NAME
-	points.Value = 0
-	points.Parent = leaderstats
-end
-
-Players.PlayerAdded:Connect(onPlayerAdded)
-
-
-
 
 local function updatePlayerCoins(player, updateFunction)
 	-- Update the coin table
@@ -66,3 +50,4 @@ for _, coin in coins do
 		onCoinTouched(otherPart, coin)
 	end)
 end
+
