@@ -154,15 +154,10 @@ end
 
 -- declarations
 --宣言
-local toolAnim = "None"
-local toolAnimTime = 0
-
 local jumpAnimTime = 0
 local jumpAnimDuration = 0.175
 
-local toolTransitionTime = 0.1
 local fallTransitionTime = 0.2
-local jumpMaxLimbVelocity = 0.75
 
 -- functions
 --機能
@@ -266,75 +261,6 @@ end
 
 -------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------
---ツールアニメ名前
-local toolAnimName = ""
---ツールアニメの前トラック
-local toolOldAnimTrack = nil
---ツールアニメのトラック
-local toolAnimTrack = nil
---現在ツールアニメキーフレームハンドル
-local currentToolAnimKeyframeHandler = nil
-
-local function toolKeyFrameReachedFunc(frameName)
-	if (frameName == "End") then
---		print("Keyframe : ".. frameName)
-		local repeatAnim = stopToolAnimations()
-		playToolAnimation(repeatAnim, 0.0, Humanoid)
-	end
-end
-
-
-function playToolAnimation(animName, transitionTime, humanoid)
-	if (animName ~= toolAnimName) then		
-		
-		if (toolAnimTrack ~= nil) then
-			toolAnimTrack:Stop()
-			toolAnimTrack:Destroy()
-			transitionTime = 0
-		end
-
-		local roll = math.random(1, animTable[animName].totalWeight)
-		local origRoll = roll
-		local idx = 1
-		while (roll > animTable[animName][idx].weight) do
-			roll = roll - animTable[animName][idx].weight
-			idx = idx + 1
-		end
---		print(animName .. " * " .. idx .. " [" .. origRoll .. "]")
-		local anim = animTable[animName][idx].anim
-
-		-- load it to the humanoid; get AnimationTrack
-		toolOldAnimTrack = toolAnimTrack
-		toolAnimTrack = humanoid:LoadAnimation(anim)
-		
-		-- play the animation
-		toolAnimTrack:Play(transitionTime)
-		toolAnimName = animName
-
-		currentToolAnimKeyframeHandler = toolAnimTrack.KeyframeReached:connect(toolKeyFrameReachedFunc)
-	end
-end
-
-function stopToolAnimations()
-	local oldAnim = toolAnimName
-
-	if (currentToolAnimKeyframeHandler ~= nil) then
-		currentToolAnimKeyframeHandler:disconnect()
-	end
-
-	toolAnimName = ""
-	if (toolAnimTrack ~= nil) then
-		toolAnimTrack:Stop()
-		toolAnimTrack:Destroy()
-		toolAnimTrack = nil
-	end
-
-
-	return oldAnim
-end
-
--------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------
 
 --走ってるとき
 function onRunning(speed)
@@ -399,41 +325,6 @@ function onSwimming(speed)
 	end
 end
 
-
-local function getTool()	
-	for _, kid in ipairs(Figure:GetChildren()) do
-		if kid.className == "Tool" then return kid end
-	end
-	return nil
-end
-
-local function getToolAnim(tool)
-	for _, c in ipairs(tool:GetChildren()) do
-		if c.Name == "toolanim" and c.className == "StringValue" then
-			return c
-		end
-	end
-	return nil
-end
-
-local function animateTool()
-	
-	if (toolAnim == "None") then
-		playToolAnimation("toolnone", toolTransitionTime, Humanoid)
-		return
-	end
-
-	if (toolAnim == "Slash") then
-		playToolAnimation("toolslash", 0, Humanoid)
-		return
-	end
-
-	if (toolAnim == "Lunge") then
-		playToolAnimation("toollunge", 0, Humanoid)
-		return
-	end
-end
-
 local function moveSit()
 	--最大速度設定
 	RightShoulder.MaxVelocity = 0.15
@@ -485,33 +376,6 @@ function move(time)
 		LeftShoulder:SetDesiredAngle(desiredAngle - climbFudge)
 		RightHip:SetDesiredAngle(-desiredAngle)
 		LeftHip:SetDesiredAngle(-desiredAngle)
-	end
-
-	-- Tool Animation handling
-	local tool = getTool()
-	--ツールを持っているときだけ処理
-	if tool then
-	
-		local animStringValueObject = getToolAnim(tool)
-
-		if animStringValueObject then
-			toolAnim = animStringValueObject.Value
-			-- message recieved, delete StringValue
-			animStringValueObject.Parent = nil
-			toolAnimTime = time + .3
-		end
-
-		if time > toolAnimTime then
-			toolAnimTime = 0
-			toolAnim = "None"
-		end
-
-		animateTool()		
-	else
-		--ツールのアニメーションを止める
-		stopToolAnimations()
-		toolAnim = "None"
-		toolAnimTime = 0
 	end
 end
 
