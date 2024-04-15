@@ -41,6 +41,7 @@ function walkanim(walkspeed)
 	end
 end
 npchumanoid.Running:connect(walkanim)
+
 function randomwalk()
 	while wait(math.random(3,6)) do
 		if not shooting and not walking then
