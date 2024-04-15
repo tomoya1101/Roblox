@@ -65,14 +65,14 @@ while true do
 		--１か２のランダムな数値をとる
 		--１だった時に以下の処理を行う
 		if math.random(1, 2) == 1 then
-			--ジャンプさせる
 			Humanoid.Jump = true
 		end
-		--次に動き出すまでの時間
+		
 		wait(math.random(1, 2))
 
 		--Move関数
 		--Torso ~ math.rando()) までが場所（現在のx + (-11 ~ 11) , 現在のy + 0 , 現在のz + (-11 ~ 11)） , Humanoid.WalkToPart  CurrentPartは規定値nill（設定しておいた方がよい）
+		--向いている方向も変わる
 		Humanoid:MoveTo(Torso.Position + Vector3.new(math.random(-MaxInc, MaxInc), 0, math.random(-MaxInc, MaxInc)), CurrentPart)
 	end
 end
