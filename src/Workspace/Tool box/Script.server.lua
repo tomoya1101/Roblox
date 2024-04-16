@@ -1,18 +1,25 @@
-local ToolNames = {"robux bomb", "robux bomb"}
+--ツールの入っている場所
 local Storage = game:GetService("ServerStorage")
+--このスクリプトの親
+local ProximityPrompt = script.Parent
+--取ってくるツールの名前（今回は親の名前）
+local ToolNames = ProximityPrompt.Parent.Name
 
-
-local Part = script.Parent
-local ClickDetector = Part:WaitForChild("ClickDetector")
-
-ClickDetector.MouseClick:connect(function(Player)
-	if Player and Player.Character then
+--Eキー長押しされたか
+ProximityPrompt.Triggered:Connect(function(Player)
+	print(ToolNames)
+	--プレイヤーかどうか
+	if Player then
+		--プレイヤーのバックパックを取得する
 		local Backpack = Player:WaitForChild("Backpack")
-		for i = 1, #ToolNames do
-			local Tool = Storage:FindFirstChild(ToolNames[i])
-			if Tool then
-				Tool:clone().Parent = Backpack
-			end
+		--ほしいツールを探す
+		local Tool = Storage:FindFirstChild(ToolNames)
+		--ほしいツールがあれば
+		if Tool then
+			--ツールのクローンを作り、その親をバックパックにする
+			Tool:clone().Parent = Backpack
 		end
+		--ツールを手に入れたのでフィールドに存在するツールは消す
+		ProximityPrompt.Parent:Destroy()
 	end
 end)
