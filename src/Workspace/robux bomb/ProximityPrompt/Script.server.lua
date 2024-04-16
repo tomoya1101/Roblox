@@ -2,14 +2,13 @@
 local Storage = game:GetService("ServerStorage")
 --このスクリプトの親
 local ProximityPrompt = script.Parent
---取ってくるツールの名前（今回は親の名前）
+--取ってくるツールの名前
 local ToolNames = ProximityPrompt.Parent.Name
 
 --Eキー長押しされたか
 ProximityPrompt.Triggered:Connect(function(Player)
-	print(ToolNames)
 	--プレイヤーかどうか
-	if Player then
+	if Player and Player.Character then
 		--プレイヤーのバックパックを取得する
 		local Backpack = Player:WaitForChild("Backpack")
 		--ほしいツールを探す
