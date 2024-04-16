@@ -1,10 +1,7 @@
 local distanciamax = 20 -- 20 metros para o NPC perSeguir o jogador NPCがプレイヤーを追いかけるまでの20メートル
 local distanciamin = 0 -- 5 de distancia minima para o bot parar 5 ボットが停止するための最短距離
 function jogador()
-	--#game.Players:GetPlayers() Playerの総数が返ってくる　自分だけなら１が返ってくる
-	--game.Players:GetPlayers()  連想配列が返ってくる　自分だけなら [1] = player名前
-
-	repeat wait() until #game.Players:GetPlayers() >= 1 -- esperar até que a quantidade de jogadores for maior que 1 ou igual プレーヤーの数が1以上になるまで待つ。
+	repeat wait() until game.Players.NumPlayers >= 1 -- esperar até que a quantidade de jogadores for maior que 1 ou igual プレーヤーの数が1以上になるまで待つ。
 	local NPC = script.Parent
 	local NPCHumanoidRoot = NPC.HumanoidRootPart
 	local NPCHumanoid = NPC.Humanoid
